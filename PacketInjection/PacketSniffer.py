@@ -27,6 +27,12 @@ class PacketSniffer:
             self.DestMac = h[12:24]
             self.totallen = h[32:36]
 
+            self.SrcIP = h[52:60]
+            self.DestIP = h[60:68]
+
+            self.SrcPort = h[68:72]
+            self.DestPort = h[72:76]
+
 
 
 packetsniffer = PacketSniffer('wlp2s0')

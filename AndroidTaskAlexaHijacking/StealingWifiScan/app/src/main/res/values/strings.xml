@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="maintitle">Stealing WiFi Scan Results using Google Home</string>
+    <string name="attackToggleName">Turn on Attack</string>
+</resources>
