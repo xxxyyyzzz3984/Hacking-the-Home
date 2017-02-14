@@ -132,4 +132,8 @@ public class HomeDeviceInfo {
 
         return content;
     }
+
+    public void setGHDIP(String ip_addr) {
+        mGHDIP = ip_addr;
+    }
 }

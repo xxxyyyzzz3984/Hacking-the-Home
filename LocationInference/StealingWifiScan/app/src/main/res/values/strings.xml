@@ -3,4 +3,5 @@
     <string name="maintitleText">WiFi Scan Stealing by Exploiting Google Home</string>
     <string name="defaultServer">192.168.201.10</string>
     <string name="defaultPort">50000</string>
+    <string name="GOOGLE_API_KEY">AIzaSyCqfLk5WUwBsxtAnbpfdkWBKIOtnDEF2ys</string>
 </resources>

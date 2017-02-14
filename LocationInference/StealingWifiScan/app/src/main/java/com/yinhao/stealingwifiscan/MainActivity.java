@@ -15,6 +15,7 @@ import com.spark.submitbutton.SubmitButton;
 
 import java.io.IOException;
 
+
 public class MainActivity extends AppCompatActivity implements ThreadCompleteListener {
 
     private TextView mSwitchText;
@@ -56,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
+                    TextView targetGHD_Text = (TextView) findViewById(R.id.ghdIPText);
+                    if (!targetGHD_Text.getText().toString().matches("")) {
+                        mGHDIP = targetGHD_Text.getText().toString();
+                    }
 
                     mSwitchText.setText("Attack is on");
                     mSwitchText.setTextColor(getResources().getColor(R.color.colorAccent));
@@ -77,17 +82,22 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
         mAttackThread = new NotifyingThread() {
             @Override
             public void doRun() {
-//                try {
-//                    mGHDInfo = new HomeDeviceInfo();
-//                    mGHDIP = mGHDInfo.getIPfromMac(OurHomeMac);
-//                    if (!mGHDIP.matches("")) {
-//                        System.out.println("Google Home Device Found!! With IP Address " + mGHDIP);
-//                        mScanResults = mGHDInfo.getScanResults();
-//                    }
-//                }
-//                catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    mGHDInfo = new HomeDeviceInfo();
+                    if(mGHDIP.matches("")) {
+                        mGHDIP = mGHDInfo.getIPfromMac(OurHomeMac);
+                    }
+                    else {
+                        mGHDInfo.setGHDIP(mGHDIP);
+                    }
+                    if (!mGHDIP.matches("")) {
+                        System.out.println("Google Home Device Found!! With IP Address " + mGHDIP);
+                        mScanResults = mGHDInfo.getScanResults();
+                    }
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -134,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mLoadingDlg.hide();
+                    mLoadingDlg.dismiss();
                     Toast.makeText(MainActivity.this, "Data has been collected", Toast.LENGTH_LONG).show();
                     mViewLocationBtn.setVisibility(View.VISIBLE);
                 }

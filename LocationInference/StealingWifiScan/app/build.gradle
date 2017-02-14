@@ -29,4 +29,5 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.5'
     compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
     compile 'me.spark:submitbutton:1.0.1'
+    compile 'com.google.android.gms:play-services:7.5.0'
 }
