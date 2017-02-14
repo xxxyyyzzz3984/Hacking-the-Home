@@ -82,8 +82,6 @@ public class HomeDeviceInfo {
 
             URL url = new URL("http://" + ip_candidate + ":8008/setup/eureka_info");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000);
-            urlConnection.setConnectTimeout(10000);
             try {
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                 content = IOStreamProcessing.readStream(in);
@@ -123,8 +121,6 @@ public class HomeDeviceInfo {
         String content = "";
         URL url = new URL("http://" + mGHDIP + ":8008/setup/scan_results");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setReadTimeout(10000);
-        urlConnection.setConnectTimeout(10000);
         try {
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             content = IOStreamProcessing.readStream(in);

