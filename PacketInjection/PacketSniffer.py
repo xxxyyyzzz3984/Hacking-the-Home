@@ -33,6 +33,9 @@ class PacketSniffer:
             self.SrcPort = h[68:72]
             self.DestPort = h[72:76]
 
+            self.SeqNo = h[76:84]
+            self.AckSeqNo = h[84:92]
+
 
 
 packetsniffer = PacketSniffer('wlp2s0')
