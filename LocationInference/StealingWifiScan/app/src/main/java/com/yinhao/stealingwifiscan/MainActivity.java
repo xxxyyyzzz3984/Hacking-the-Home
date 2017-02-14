@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
     private HomeDeviceInfo mGHDInfo;
     public static String OurHomeMac = "F4:F5:D8:C1:B9:2E";
     private String mGHDIP = "";
-    private String mScanResults = "test";
+    private String mScanResults;
     private NotifyingThread mAttackThread;
     private NotifyingThread mSendServerThread;
     private String AttackThreadLabel = "attack_thread";
@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
         //set default attack mode false
         mAttackSwitch.setChecked(false);
 
-        init_sendserver();
-        mSendServerThread.start();
 
         //response to attack switch
         mAttackSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements ThreadCompleteLis
                     mSwitchText.setTextColor(getResources().getColor(R.color.colorAccent));
                     initilize_attackthread();
                     mAttackThread.addListener(MainActivity.this);
-//                    mAttackThread.start();
+                    mAttackThread.start();
 
                 }else{
                     mSwitchText.setText("Attack is off");
