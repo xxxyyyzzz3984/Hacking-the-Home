@@ -8,6 +8,37 @@ class PacketSniffer:
         self.soc = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.htons(3))
         self.soc.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 2 ** 30)
         self.interface = interface
+        self.tcp_packet_hex = None
+
+        '''Only for TCP case'''
+        self.SrcMac_Start = 0
+        self.SrcMac_End = 12
+
+        self.DestMac_Start = 12
+        self.DestMac_End = 24
+
+        self.SrcIP_Start = 52
+        self.SrcIP_End = 60
+
+        self.DestIP_Start = 60
+        self.DestIP_End = 68
+
+        self.SrcPort_Start = 68
+        self.SrcPort_End = 72
+
+        self.DestPort_Start = 72
+        self.DestPort_End = 76
+
+        self.SeqNo_Start = 76
+        self.SeqNo_End = 84
+
+        self.AckSeqNo_Start = 84
+        self.AckSeqNo_End = 92
+
+        self.flags_Start = 92
+        self.flags_End = 96
+
+        self.payload_Start = 131
 
         try:
             self.soc.bind((self.interface, 0x0003))
@@ -23,21 +54,8 @@ class PacketSniffer:
 
         # check if it is a tcp protocol
         if h[46:48] == '06':
-            self.SrcMac = h[0:12]
-            self.DestMac = h[12:24]
-            self.totallen = h[32:36]
+            self.tcp_packet_hex = h
+            return True
 
-            self.SrcIP = h[52:60]
-            self.DestIP = h[60:68]
-
-            self.SrcPort = h[68:72]
-            self.DestPort = h[72:76]
-
-            self.SeqNo = h[76:84]
-            self.AckSeqNo = h[84:92]
-
-
-
-packetsniffer = PacketSniffer('wlp2s0')
-while True:
-    packetsniffer.get_tcp_package()
+        else:
+            return False
