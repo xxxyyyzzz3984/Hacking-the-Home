@@ -38,7 +38,7 @@ class PacketSniffer:
         self.flags_Start = 92
         self.flags_End = 96
 
-        self.payload_Start = 131
+        self.payload_Start = 132
 
         try:
             self.soc.bind((self.interface, 0x0003))
@@ -51,10 +51,10 @@ class PacketSniffer:
         a = self.soc.recvfrom(65565)[0]
         h = binascii.hexlify(a)
         h = h.replace('\r', '').replace('\n', '').replace(' ','')
+        self.tcp_packet_hex = h
 
         # check if it is a tcp protocol
         if h[46:48] == '06':
-            self.tcp_packet_hex = h
             return True
 
         else:
