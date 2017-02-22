@@ -2,6 +2,7 @@ import argparse
 import time
 from PacketSniffer import PacketSniffer
 import knn_train
+import decisiontree_train
 
 sound_dir = 'speech_train/'
 speech_label = 1
@@ -57,7 +58,23 @@ while True:
 
 question_list_file = 'speech_train/question_list.txt'
 q_f = open(question_list_file, 'r')
-question_index = knn_train.get_knn_prediction(target_packets)
+
+print 'Calculating......'
+labels = dict()
+for i in range(50):
+    key = int(round(decisiontree_train.get_prediction(target_packets)))
+    if key in labels:
+        labels[key] += 1
+    else:
+        labels[key] = 1
+
+question_index = 0
+max_val = 0
+for key in labels:
+    if labels[key] > max_val:
+        max_val = labels[key]
+        question_index = key
+
 lines = []
 for line in q_f:
     lines.append(line)

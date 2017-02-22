@@ -11,7 +11,7 @@ google_home_ip_hex = 'c0a80069'
 thresh_len = 200 #threshold length of a packet, if <, drop
 collect_duration = 20 #duration to collect packets
 total_train_sound = 10 #total number of training sound files
-each_train_trials = 50 #how many times each sound trains
+each_train_trials = 100 #how many times each sound trains
 
 def playsound(file_path):
     os.system('aplay ' + file_path)

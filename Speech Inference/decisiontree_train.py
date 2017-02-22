@@ -1,6 +1,11 @@
+from sklearn.mixture import GaussianMixture
+from sklearn.multiclass import OneVsOneClassifier
+from sklearn.naive_bayes import GaussianNB, BernoulliNB
 from sklearn.neighbors.nearest_centroid import NearestCentroid
 import numpy as np
-from sklearn import neighbors
+from sklearn import neighbors, tree
+from sklearn.neural_network import BernoulliRBM
+from sklearn.svm import LinearSVC
 
 
 def rotate(l, n):
@@ -9,12 +14,12 @@ def rotate(l, n):
 max_len = 300
 
 # x_data is int list
-def get_knn_prediction(x_data):
+def get_prediction(x_data):
     packet_collect_dir = 'packet_collect/'
     x_list = []
     y_list = []
 
-    for i in range(1, 11):
+    for i in range(1, 10):
         file_path = packet_collect_dir + 'speech%d.txt' % i
         f = open(file_path, 'r')
         for line in f:
@@ -31,8 +36,8 @@ def get_knn_prediction(x_data):
 
     X = np.array(x_list)
     Y = np.array(y_list)
-    knn = neighbors.KNeighborsRegressor(150, weights='distance')
-    clf = knn.fit(X, Y)
+    clf = tree.DecisionTreeRegressor()
+    clf.fit(X, Y)
 
     if len(x_data) < max_len:
         for j in range(max_len - len(x_data)):
