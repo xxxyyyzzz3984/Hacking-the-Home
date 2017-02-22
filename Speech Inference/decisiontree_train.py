@@ -1,11 +1,6 @@
-from sklearn.mixture import GaussianMixture
-from sklearn.multiclass import OneVsOneClassifier
-from sklearn.naive_bayes import GaussianNB, BernoulliNB
-from sklearn.neighbors.nearest_centroid import NearestCentroid
 import numpy as np
 from sklearn import neighbors, tree
-from sklearn.neural_network import BernoulliRBM
-from sklearn.svm import LinearSVC
+
 
 
 def rotate(l, n):

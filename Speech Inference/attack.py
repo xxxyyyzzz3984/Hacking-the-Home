@@ -1,7 +1,6 @@
 import argparse
 import time
 from PacketSniffer import PacketSniffer
-import knn_train
 import decisiontree_train
 
 sound_dir = 'speech_train/'
@@ -68,18 +67,16 @@ for i in range(50):
     else:
         labels[key] = 1
 
-question_index = 0
-max_val = 0
-for key in labels:
-    if labels[key] > max_val:
-        max_val = labels[key]
-        question_index = key
+print
+print
+print 'The probabilities of questions asked:'
+print
 
 lines = []
 for line in q_f:
     lines.append(line)
 
-print
-print
-print 'It is mostly likely you asked:'
-print lines[question_index-1]
+for key in labels:
+    print lines[key-1].replace('\n', '') + \
+          '.........' + str((float(labels[key])/50)*100) + '%'
+    print
