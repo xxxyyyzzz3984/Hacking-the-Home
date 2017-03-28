@@ -108,9 +108,10 @@ public class ShowLocationActivity extends AppCompatActivity implements OnMapRead
                             getResources().getString(R.string.GOOGLE_API_KEY));
             HttpsURLConnection httpURLConnection = (HttpsURLConnection) query_url.openConnection();
             httpURLConnection.setDoInput(true);
-            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoOutput(false);
             httpURLConnection.setRequestProperty("Content-Type", "application/json");
             httpURLConnection.setRequestMethod("POST");
+
 
             OutputStream outputStream = httpURLConnection.getOutputStream();
 
@@ -119,7 +120,7 @@ public class ShowLocationActivity extends AppCompatActivity implements OnMapRead
             bufferedWriter.flush();
 
             InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
-            response = IOStreamProcessing.convertInputStreamToString(inputStream);
+            response = IOStreamProcessing.readStream(inputStream);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -150,7 +151,7 @@ public class ShowLocationActivity extends AppCompatActivity implements OnMapRead
 
         JSONObject Query = new JSONObject();
         try {
-            Query.put("considerIp", "false");
+            Query.put("considerIp", "true");
             Query.put("wifiAccessPoints", wifi_ap_arr);
         } catch (JSONException e) {
             e.printStackTrace();

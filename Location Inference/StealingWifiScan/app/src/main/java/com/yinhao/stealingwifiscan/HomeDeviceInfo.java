@@ -118,6 +118,19 @@ public class HomeDeviceInfo {
             return "";
         }
 
+        for(int times = 0; times<=10; times++) {
+
+            URL url_scanwifi = new URL("http://" + mGHDIP + ":8008/setup/scan_wifi");
+            HttpURLConnection urlConnection_scanwifi = (HttpURLConnection) url_scanwifi.openConnection();
+            urlConnection_scanwifi.setRequestMethod("POST");
+        }
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         String content = "";
         URL url = new URL("http://" + mGHDIP + ":8008/setup/scan_results");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
