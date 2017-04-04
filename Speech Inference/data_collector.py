@@ -14,10 +14,10 @@ total_train_sound = 10 #total number of training sound files
 each_train_trials = 200 #how many times each sound trains
 
 def playsound(file_path):
-    os.system('aplay ' + file_path)
+    os.system('play ' + file_path)
 
-packet_snf = PacketSniffer('wlp2s0')
-packet_inj = PacketInjector('wlp2s0')
+packet_snf = PacketSniffer('wlan0')
+packet_inj = PacketInjector('wlan0')
 
 play_count = 0
 
