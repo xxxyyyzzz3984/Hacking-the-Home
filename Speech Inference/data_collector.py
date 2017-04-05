@@ -5,9 +5,9 @@ from PacketInjector import PacketInjector
 import os
 
 sound_dir = 'speech_train/'
-speech_label = 1
+speech_label = 6
 packet_collect_dir = 'new_packet_collect/'
-google_home_ip_hex = 'c0a80003'
+google_home_ip_hex = 'c0a8006a'
 thresh_len = 200 #threshold length of a packet, if <, drop
 collect_duration = 20 #duration to collect packets
 total_train_sound = 10 #total number of training sound files
