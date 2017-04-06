@@ -150,8 +150,11 @@ train_step = tf.train.AdamOptimizer(1e-6).minimize(cross_entropy)
 
 sess.run(tf.global_variables_initializer())
 saver = tf.train.Saver()
-# saver.restore(sess, './onet_train.ckpt')
-# print 'Model restored.'
+try:
+    saver.restore(sess, './onet_train.ckpt')
+    print 'Model restored.'
+except:
+    pass
 step = 0
 total_err = 0
 total_accuracy = 0
